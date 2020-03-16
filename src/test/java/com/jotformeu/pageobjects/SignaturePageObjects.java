@@ -1,29 +1,34 @@
 package com.jotformeu.pageobjects;
 
+import com.jotformeu.BasePageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.PageFactory;
 
-public class SignaturePageObjects extends SharedPageObjects {
+public class SignaturePageObjects extends BasePageObjects {
 
     @FindBy(css = "canvas.jSignature")
     private WebElement signatureField;
 
-    @FindBy(css = ".clear-pad-btn.clear-pad")
-    private WebElement clearSignature;
-
-    @FindBy(css = "#cid_14 > div > div.jfCard-actions > button.jfInput-button.forNext.u-right")
+    @FindBys({
+            @FindBy(css = "#cid_14"),
+            @FindBy(css = ".jfInput-button.forNext.u-right")
+    })
     private WebElement signatureNext;
 
 
     public SignaturePageObjects(WebDriver driver) {
         super(driver);
+        PageFactory.initElements(driver, this);
     }
 
     public void drawSignature() {
+        // A simple click would have been enough on the element but wanted to draw something
         Actions builder = new Actions(driver);
-         builder.moveToElement(signatureField)
+        builder.moveToElement(signatureField)
                 .clickAndHold(signatureField)
                 .moveByOffset(100, 60)
                 .release(signatureField)
@@ -31,11 +36,7 @@ public class SignaturePageObjects extends SharedPageObjects {
                 .perform();
     }
 
-    public void clickOnNext() {
+    public void continueToPhoneNumber() {
         signatureNext.click();
-    }
-
-    public void clearSignature() {
-        clearSignature.click();
     }
 }
