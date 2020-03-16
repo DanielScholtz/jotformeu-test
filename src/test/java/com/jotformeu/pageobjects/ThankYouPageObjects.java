@@ -19,7 +19,6 @@ public class ThankYouPageObjects extends BasePageObjects {
     private WebElement thankYouMsg;
 
     public void isThankYouBlockDisplayed() {
-        wait.until(ExpectedConditions.visibilityOf(thankYouBlock));
         isDisplayed(thankYouBlock);
     }
 
