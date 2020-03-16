@@ -1,19 +1,34 @@
 package com.jotformeu.pageobjects;
 
-import com.jotformeu.BasePageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import com.jotformeu.BasePageObjects;
+
 public class ThankYouPageObjects extends BasePageObjects {
+
+    @FindBy(css = ".jfThankYou-imageWrapper")
+    private WebElement thankYouBlock;
 
     @FindBy(css = ".jfThankYou-header.form-header")
     private WebElement thankYouHeader;
 
-    public void isThankYouHeaderDisplayed() {
-        wait.until(ExpectedConditions.visibilityOf(thankYouHeader));
-        isDisplayed(thankYouHeader);
+    @FindBy(css = ".jfThankYou-description.form-subHeader")
+    private WebElement thankYouMsg;
+
+    public void isThankYouBlockDisplayed() {
+        wait.until(ExpectedConditions.visibilityOf(thankYouBlock));
+        isDisplayed(thankYouBlock);
+    }
+
+    public String getTextOfThankYouHeader() {
+        return thankYouHeader.getText();
+    }
+
+    public String getTextOfThankYouMessage() {
+        return thankYouMsg.getText();
     }
 
     public ThankYouPageObjects(WebDriver driver) {

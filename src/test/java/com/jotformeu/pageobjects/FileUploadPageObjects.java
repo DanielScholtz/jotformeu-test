@@ -1,15 +1,18 @@
 package com.jotformeu.pageobjects;
 
-import com.jotformeu.BasePageObjects;
+import java.io.File;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.io.File;
+import com.jotformeu.BasePageObjects;
 
 public class FileUploadPageObjects extends BasePageObjects {
+
+    private static final String FILE_NAME = "src/test/resources/com/jotformeu/uploadfile/test.txt";
 
     @FindBy(name = "file")
     private WebElement fileUploadBrowseFiles;
@@ -17,31 +20,26 @@ public class FileUploadPageObjects extends BasePageObjects {
     @FindBy(css = ".qq-upload-delete")
     private WebElement fileUploadDeleteFile;
 
-    @FindBys( {
-            @FindBy(css = "#cid_12"),
-            @FindBy(css = ".jfInput-button.forNext.u-right")
+    @FindBys({
+        @FindBy(css = "#cid_12"),
+        @FindBy(css = ".jfInput-button.forNext.u-right")
     })
     private WebElement fileUploadNext;
 
-    @FindBys( {
-            @FindBy(css = "#cid_12"),
-            @FindBy(css = ".jsQuestionLabelContainer")
+    @FindBys({
+        @FindBy(css = "#cid_12"),
+        @FindBy(css = ".jsQuestionLabelContainer")
     })
     private WebElement fileUploadQuestionLabel;
 
-    @FindBys( {
-            @FindBy(css = "#cid_12"),
-            @FindBy(css = ".jfRequiredStar")
+    @FindBys({
+        @FindBy(css = "#cid_12"),
+        @FindBy(css = ".jfRequiredStar")
     })
     private WebElement fileUploadIsMandatory;
 
-    public FileUploadPageObjects(WebDriver driver) {
-        super(driver);
-    }
-
     public void uploadFile() {
-        String filename = "src/test/resources/com/jotformeu/uploadfile/test.txt";
-        File file = new File(filename);
+        File file = new File(FILE_NAME);
         String absolutePathOfFile = file.getAbsolutePath();
         fileUploadBrowseFiles.sendKeys(absolutePathOfFile);
         wait.until(ExpectedConditions.visibilityOfAllElements(fileUploadDeleteFile));
@@ -51,7 +49,24 @@ public class FileUploadPageObjects extends BasePageObjects {
         fileUploadNext.click();
     }
 
-    public void isDeleteFileDisplayed() {
-        isDisplayed(fileUploadBrowseFiles);
+    public String getTextOfQuestionLabelOnFileUpload() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(fileUploadQuestionLabel));
+        return fileUploadQuestionLabel.getText();
+    }
+
+    public boolean isQuestionLabelOnFileUploadDisplayed() {
+        return isDisplayed(fileUploadQuestionLabel);
+    }
+
+    public boolean isMandatoryDisplayedOnFileUpload() {
+        return isDisplayed(fileUploadIsMandatory);
+    }
+
+    public boolean isDeleteFileDisplayedOnFileUpload() {
+        return isDisplayed(fileUploadDeleteFile);
+    }
+
+    public FileUploadPageObjects(WebDriver driver) {
+        super(driver);
     }
 }

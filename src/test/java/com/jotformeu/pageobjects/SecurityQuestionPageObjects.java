@@ -1,14 +1,16 @@
 package com.jotformeu.pageobjects;
 
-import com.jotformeu.BasePageObjects;
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.List;
+import com.jotformeu.BasePageObjects;
 
-public class SecurityQuestionPageObjects  extends BasePageObjects {
+public class SecurityQuestionPageObjects extends BasePageObjects {
 
     @FindBy(css = ".jfDropdown-chipContainer")
     private WebElement dropDownQuestion;
@@ -19,17 +21,24 @@ public class SecurityQuestionPageObjects  extends BasePageObjects {
     @FindBy(css = "#input_13_field_2")
     private WebElement answerField;
 
-    @FindBys( {
-            @FindBy(css = "#cid_13"),
-            @FindBy(css = ".jfInput-button.forNext.u-right")
+    @FindBys({
+        @FindBy(css = "#cid_13"),
+        @FindBy(css = ".jfInput-button.forNext.u-right")
     })
     private WebElement securityQuestionNext;
+
+    @FindBys({
+        @FindBy(css = "#cid_13"),
+        @FindBy(css = ".jsQuestionLabelContainer")
+    })
+    private WebElement securityQuestionLabel;
 
     public void clickSecurityQuestionDropDown() {
         dropDownQuestion.click();
     }
 
     public void selectQuestion(String question) {
+        // Used loop for searching the text instead of getting the nth index since the order of the question could change
         for (WebElement dropDownOption : dropDownOptions) {
             if (dropDownOption.getText().equals(question)) {
                 dropDownOption.click();
@@ -43,6 +52,11 @@ public class SecurityQuestionPageObjects  extends BasePageObjects {
 
     public void continueToEmail() {
         securityQuestionNext.click();
+    }
+
+    public String getTextOfQuestionLabelOnSecurityQuestion() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(securityQuestionLabel));
+        return securityQuestionLabel.getText();
     }
 
     public SecurityQuestionPageObjects(WebDriver driver) {
