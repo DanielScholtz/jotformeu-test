@@ -6,12 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.jotformeu.drivermanager.DriverManager;
-
 public class BasePageObjects {
 
     public WebDriverWait wait;
-    public DriverManager drivermanager = new DriverManager();
     public WebDriver driver;
 
     public BasePageObjects(WebDriver driver) {
