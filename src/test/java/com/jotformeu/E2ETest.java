@@ -18,6 +18,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jotformeu.drivermanager.WebFactory;
 import com.jotformeu.pageobjects.EmailPageObject;
@@ -38,7 +40,7 @@ public class E2ETest {
     private static final String THANK_YOU_HEADER = "thank_you_header";
     private static final String SUBMISSION_RECEIVED_MESSAGE = "submission_received_message";
     private static final String FORM_PAGE = "https://form.jotformeu.com/92543326450353";
-    public static WebDriver driver;
+    private static WebDriver driver;
     private static WelcomePageObject welcomePageObject;
     private static FileUploadPageObject fileUploadPageObject;
     private static SignaturePageObject signaturePageObject;
@@ -47,6 +49,8 @@ public class E2ETest {
     private static EmailPageObject emailPageObject;
     private static ThankYouPageObject thankYouPageObject;
     private Map<String, String> localization_texts = new HashMap<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(E2ETest.class);
 
     public static Stream<Arguments> translationDataProvider() {
         return Stream.of(
@@ -84,7 +88,7 @@ public class E2ETest {
         // GIVEN
         setLocalizationKeys();
         Locale.setDefault(new Locale(pos, locale));
-        System.out.println("Current Locale: " + Locale.getDefault());
+        LOGGER.info("Current Locale: {}", Locale.getDefault());
         ResourceBundle mybundle = ResourceBundle.getBundle("form_text");
 
         // WHEN
