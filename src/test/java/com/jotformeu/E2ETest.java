@@ -93,23 +93,23 @@ public class E2ETest {
 
         // WHEN
         verifyWelcomePage(mybundle.getString(localization_texts.get(TEST_FORM_HEADER)));
-        navigateOnWelcomePage();
+        continueToFileUploadPage();
 
         uploadFile();
         verifyUploadFilePage();
-        navigateOnUploadFilePage();
+        continueToSignaturePage();
 
         drawSignature();
         verifySignaturePage(mybundle.getString(localization_texts.get(SIGNATURE_HEADER)));
-        navigateOnSignaturePage();
+        continueToPhoneNumberPage();
 
         fillPhoneNumberPage();
         verifyPhoneNumberPage(mybundle.getString(localization_texts.get(PHONE_NUMBER_HEADER)));
-        navigateOnPhoneNumberPage();
+        continueToSecurityQuestionPage();
 
         fillSecurityQuestionPage(mybundle.getString(localization_texts.get(SECURITY_QUESTION)));
         verifySecurityQuestionPage(mybundle.getString(localization_texts.get(SECURITY_QUESTION_HEADER)));
-        navigateOnSecurityQuestionPage();
+        continueToEmailPage();
 
         fillEmailPage();
         verifyEmailPage();
@@ -126,7 +126,7 @@ public class E2ETest {
 
     }
 
-    public void navigateOnWelcomePage() {
+    public void continueToFileUploadPage() {
         welcomePageObject.clickOnNextButton();
     }
 
@@ -140,7 +140,7 @@ public class E2ETest {
         assertTrue(fileUploadPageObject.isDeleteFileDisplayedOnFileUpload());
     }
 
-    public void navigateOnUploadFilePage() {
+    public void continueToSignaturePage() {
         fileUploadPageObject.continueToSignature();
     }
 
@@ -154,7 +154,7 @@ public class E2ETest {
         assertTrue(signaturePageObject.isClearSignatureDisplayed());
     }
 
-    public void navigateOnSignaturePage() {
+    public void continueToPhoneNumberPage() {
         signaturePageObject.continueToPhoneNumber();
     }
 
@@ -168,7 +168,7 @@ public class E2ETest {
         assertTrue(phoneNumberPageObject.isMandatoryDisplayedOnPhoneNumber());
     }
 
-    public void navigateOnPhoneNumberPage() {
+    public void continueToSecurityQuestionPage() {
         phoneNumberPageObject.continueToSecurityQuestion();
     }
 
@@ -182,7 +182,7 @@ public class E2ETest {
         assertThat(securityQuestionPageObject.getTextOfQuestionLabelOnSecurityQuestion(), is(securityQuestionHeader));
     }
 
-    public void navigateOnSecurityQuestionPage() {
+    public void continueToEmailPage() {
         securityQuestionPageObject.continueToEmail();
     }
 
