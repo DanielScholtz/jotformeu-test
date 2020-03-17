@@ -10,14 +10,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class FileUploadPageObjects extends BasePageObjects {
+public class FileUploadPageObject extends BasePageObjects {
 
     private static final String FILE_NAME = "src/test/resources/com/jotformeu/uploadfile/test.txt";
 
     @FindBy(name = "file")
     private WebElement fileUploadBrowseFiles;
 
-    @FindBy(css = ".qq-upload-delete")
+    @FindBy(className = "qq-upload-delete")
     private WebElement fileUploadDeleteFile;
 
     @FindBys({
@@ -37,6 +37,10 @@ public class FileUploadPageObjects extends BasePageObjects {
         @FindBy(css = ".jfRequiredStar")
     })
     private WebElement fileUploadIsMandatory;
+
+    public FileUploadPageObject(WebDriver driver) {
+        super(driver);
+    }
 
     public void uploadFile() {
         File file = new File(FILE_NAME);
@@ -64,9 +68,5 @@ public class FileUploadPageObjects extends BasePageObjects {
 
     public boolean isDeleteFileDisplayedOnFileUpload() {
         return isDisplayed(fileUploadDeleteFile);
-    }
-
-    public FileUploadPageObjects(WebDriver driver) {
-        super(driver);
     }
 }

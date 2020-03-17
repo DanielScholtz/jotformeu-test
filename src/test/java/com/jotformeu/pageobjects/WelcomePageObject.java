@@ -7,13 +7,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class WelcomePageObjects extends BasePageObjects {
+public class WelcomePageObject extends BasePageObjects {
 
-    @FindBy(css = "#header_welcomePage")
+    @FindBy(id = "header_welcomePage")
     private WebElement welcomePageHeader;
 
-    @FindBy(css = "#jfCard-welcome-start")
+    @FindBy(id = "jfCard-welcome-start")
     private WebElement welcomePageNextButton;
+
+    public WelcomePageObject(WebDriver driver) {
+        super(driver);
+    }
 
     public String getTextOfWelcomePageHeader() {
         return welcomePageHeader.getText();
@@ -22,9 +26,5 @@ public class WelcomePageObjects extends BasePageObjects {
     public void clickOnNextButton() {
         wait.until(ExpectedConditions.visibilityOf(welcomePageHeader));
         welcomePageNextButton.click();
-    }
-
-    public WelcomePageObjects(WebDriver driver) {
-        super(driver);
     }
 }

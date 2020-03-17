@@ -5,140 +5,203 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 
-import com.jotformeu.drivermanager.DriverManager;
-import com.jotformeu.pageobjects.EmailPageObjects;
-import com.jotformeu.pageobjects.FileUploadPageObjects;
-import com.jotformeu.pageobjects.PhoneNumberPageObjects;
-import com.jotformeu.pageobjects.SecurityQuestionPageObjects;
-import com.jotformeu.pageobjects.SignaturePageObjects;
-import com.jotformeu.pageobjects.ThankYouPageObjects;
-import com.jotformeu.pageobjects.WelcomePageObjects;
+import com.jotformeu.drivermanager.WebFactory;
+import com.jotformeu.pageobjects.EmailPageObject;
+import com.jotformeu.pageobjects.FileUploadPageObject;
+import com.jotformeu.pageobjects.PhoneNumberPageObject;
+import com.jotformeu.pageobjects.SecurityQuestionPageObject;
+import com.jotformeu.pageobjects.SignaturePageObject;
+import com.jotformeu.pageobjects.ThankYouPageObject;
+import com.jotformeu.pageobjects.WelcomePageObject;
 
 public class E2ETest {
 
-    public WebDriver driver;
-    private WelcomePageObjects welcomePageObjects;
-    private FileUploadPageObjects fileUploadPageObjects;
-    private SignaturePageObjects signaturePageObjects;
-    private PhoneNumberPageObjects phoneNumberPageObjects;
-    private SecurityQuestionPageObjects securityQuestionPageObjects;
-    private EmailPageObjects emailPageObjects;
-    private ThankYouPageObjects thankYouPageObjects;
+    private static final String TEST_FORM_HEADER = "test_form_header";
+    private static final String SIGNATURE_HEADER = "signature_header";
+    private static final String PHONE_NUMBER_HEADER = "phone_number_header";
+    private static final String SECURITY_QUESTION_HEADER = "security_question_header";
+    private static final String SECURITY_QUESTION = "security_question_dog";
+    private static final String THANK_YOU_HEADER = "thank_you_header";
+    private static final String SUBMISSION_RECEIVED_MESSAGE = "submission_received_message";
     private static final String FORM_PAGE = "https://form.jotformeu.com/92543326450353";
-    private static final String TEST_FORM_EN = "Test Form";
-    private static final String TEST_FORM_HU = "Teszt Űrlap";
-    private static final String SIGNATURE_EN = "Signature";
-    private static final String SIGNATURE_HU = "Aláírás";
-    private static final String PHONE_NUMBER_EN = "Model Phone Number";
-    private static final String PHONE_NUMBER_HU = "Telefonszám";
-    private static final String SECURITY_QUESTION_EN = "Security question";
-    private static final String SECURITY_QUESTION_HU = "Titkos kérdés";
-    private static final String SECRET_QUESTION_EN = "What is your first dog's name?";
-    private static final String SECRET_QUESTION_HU = "Mi az első kutyájának a neve?";
-    private static final String THANK_YOU_EN = "Thank You!";
-    private static final String THANK_YOU_HU = "Köszönjük!";
-    private static final String SUBMISSION_RECEIVED_EN = "Your submission has been received!";
-    private static final String SUBMISSION_RECEIVED_HU = "Az űrlapját megkaptuk!";
+    public static WebDriver driver;
+    private static WelcomePageObject welcomePageObject;
+    private static FileUploadPageObject fileUploadPageObject;
+    private static SignaturePageObject signaturePageObject;
+    private static PhoneNumberPageObject phoneNumberPageObject;
+    private static SecurityQuestionPageObject securityQuestionPageObject;
+    private static EmailPageObject emailPageObject;
+    private static ThankYouPageObject thankYouPageObject;
+    private Map<String, String> localization_texts = new HashMap<>();
 
     public static Stream<Arguments> translationDataProvider() {
         return Stream.of(
-            Arguments.of(TEST_FORM_EN, SIGNATURE_EN, PHONE_NUMBER_EN, SECURITY_QUESTION_EN, SECRET_QUESTION_EN,
-                THANK_YOU_EN, SUBMISSION_RECEIVED_EN));
-        //            Would turn on if there would be localization
-        //            Arguments.of(TEST_FORM_HU, SIGNATURE_HU, PHONE_NUMBER_HU, SECURITY_QUESTION_HU, SECRET_QUESTION_HU,
-        //                            THANK_YOU_HU, SUBMISSION_RECEIVED_HU));
+            Arguments.of("en", "GB"),
+            // It will fail since no localization on the site
+            Arguments.of("hu", "HU"));
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        driver = WebFactory.getDriver();
+        welcomePageObject = new WelcomePageObject(driver);
+        fileUploadPageObject = new FileUploadPageObject(driver);
+        signaturePageObject = new SignaturePageObject(driver);
+        phoneNumberPageObject = new PhoneNumberPageObject(driver);
+        securityQuestionPageObject = new SecurityQuestionPageObject(driver);
+        emailPageObject = new EmailPageObject(driver);
+        thankYouPageObject = new ThankYouPageObject(driver);
     }
 
     @BeforeEach
     public void setUp() {
-        driver = DriverManager.getDriver();
-        PageFactory.initElements(driver, this);
-        welcomePageObjects = new WelcomePageObjects(driver);
-        fileUploadPageObjects = new FileUploadPageObjects(driver);
-        signaturePageObjects = new SignaturePageObjects(driver);
-        phoneNumberPageObjects = new PhoneNumberPageObjects(driver);
-        securityQuestionPageObjects = new SecurityQuestionPageObjects(driver);
-        emailPageObjects = new EmailPageObjects(driver);
-        thankYouPageObjects = new ThankYouPageObjects(driver);
+        driver.manage().deleteAllCookies();
         driver.get(FORM_PAGE);
     }
 
-    @AfterEach
-    public void tearDown() {
+    @AfterAll
+    static void tearDown() {
         driver.quit();
     }
 
     @ParameterizedTest
     @MethodSource("translationDataProvider")
-    public void testSignature(String testFormHeader, String signatureHeader, String phoneNumberHeader, String securityQuestionHeader,
-        String secretQuestion, String thankYouHeader, String thankYouMessage) {
-        welcomePageTest(testFormHeader);
+    public void testSignature(String pos, String locale) {
+        // GIVEN
+        setLocalizationKeys();
+        Locale.setDefault(new Locale(pos, locale));
+        System.out.println("Current Locale: " + Locale.getDefault());
+        ResourceBundle mybundle = ResourceBundle.getBundle("form_text");
 
-        uploadFilePageTest();
+        // WHEN
+        verifyWelcomePage(mybundle.getString(localization_texts.get(TEST_FORM_HEADER)));
+        navigateOnWelcomePage();
 
-        signaturePageTest(signatureHeader);
+        uploadFile();
+        verifyUploadFilePage();
+        navigateOnUploadFilePage();
 
-        phoneNumberPageTest(phoneNumberHeader);
+        drawSignature();
+        verifySignaturePage(mybundle.getString(localization_texts.get(SIGNATURE_HEADER)));
+        navigateOnSignaturePage();
 
-        securityQuestionPageTest(securityQuestionHeader, secretQuestion);
+        fillPhoneNumberPage();
+        verifyPhoneNumberPage(mybundle.getString(localization_texts.get(PHONE_NUMBER_HEADER)));
+        navigateOnPhoneNumberPage();
 
-        emailPageTest();
+        fillSecurityQuestionPage(mybundle.getString(localization_texts.get(SECURITY_QUESTION)));
+        verifySecurityQuestionPage(mybundle.getString(localization_texts.get(SECURITY_QUESTION_HEADER)));
+        navigateOnSecurityQuestionPage();
 
-        thankYouPageObjects.isThankYouBlockDisplayed();
-        assertThat(thankYouPageObjects.getTextOfThankYouHeader(), is(thankYouHeader));
-        assertThat(thankYouPageObjects.getTextOfThankYouMessage(), is(thankYouMessage));
+        fillEmailPage();
+        verifyEmailPage();
+        submitForm();
+
+        // THEN
+        thankYouPageObject.isThankYouBlockDisplayed();
+        assertThat(thankYouPageObject.getTextOfThankYouHeader(), is(mybundle.getString(localization_texts.get(THANK_YOU_HEADER))));
+        assertThat(thankYouPageObject.getTextOfThankYouMessage(), is(mybundle.getString(localization_texts.get(SUBMISSION_RECEIVED_MESSAGE))));
     }
 
-    public void welcomePageTest(String testFormHeader) {
-        assertThat(welcomePageObjects.getTextOfWelcomePageHeader(), is(testFormHeader));
-        welcomePageObjects.clickOnNextButton();
+    public void verifyWelcomePage(String testFormHeader) {
+        assertThat(welcomePageObject.getTextOfWelcomePageHeader(), is(testFormHeader));
+
     }
 
-    public void uploadFilePageTest() {
-        fileUploadPageObjects.uploadFile();
-        assertFalse(fileUploadPageObjects.isQuestionLabelOnFileUploadDisplayed());
-        assertTrue(fileUploadPageObjects.isMandatoryDisplayedOnFileUpload());
-        assertTrue(fileUploadPageObjects.isDeleteFileDisplayedOnFileUpload());
-        fileUploadPageObjects.continueToSignature();
+    public void navigateOnWelcomePage() {
+        welcomePageObject.clickOnNextButton();
     }
 
-    public void signaturePageTest(String signatureHeader) {
-        signaturePageObjects.drawSignature();
-        assertThat(signaturePageObjects.getTextOfQuestionLabelOnSignature(), is(signatureHeader));
-        assertTrue(signaturePageObjects.isMandatoryDisplayedOnSignature());
-        assertTrue(signaturePageObjects.isClearSignatureDisplayed());
-        signaturePageObjects.continueToPhoneNumber();
+    public void uploadFile() {
+        fileUploadPageObject.uploadFile();
     }
 
-    public void phoneNumberPageTest(String phoneNumberHeader) {
-        phoneNumberPageObjects.fillAreaField("20");
-        phoneNumberPageObjects.fillPhoneNumberField("1234567");
-        assertThat(phoneNumberPageObjects.getTextOfQuestionLabelOnPhoneNumber(), is(phoneNumberHeader));
-        assertTrue(phoneNumberPageObjects.isMandatoryDisplayedOnPhoneNumber());
-        phoneNumberPageObjects.continueToSecurityQuestion();
+    public void verifyUploadFilePage() {
+        assertFalse(fileUploadPageObject.isQuestionLabelOnFileUploadDisplayed());
+        assertTrue(fileUploadPageObject.isMandatoryDisplayedOnFileUpload());
+        assertTrue(fileUploadPageObject.isDeleteFileDisplayedOnFileUpload());
     }
 
-    public void securityQuestionPageTest(String securityQuestionHeader, String secretQuestion) {
-        securityQuestionPageObjects.clickSecurityQuestionDropDown();
-        securityQuestionPageObjects.selectQuestion(secretQuestion);
-        securityQuestionPageObjects.fillSecretAnswer("test");
-        assertThat(securityQuestionPageObjects.getTextOfQuestionLabelOnSecurityQuestion(), is(securityQuestionHeader));
-        securityQuestionPageObjects.continueToEmail();
+    public void navigateOnUploadFilePage() {
+        fileUploadPageObject.continueToSignature();
     }
 
-    public void emailPageTest() {
-        emailPageObjects.fillEmailField("secret@email.com");
-        assertThat(emailPageObjects.getTextOfQuestionLabelOnEmail(), is("E-mail"));
-        emailPageObjects.submitForm();
+    public void drawSignature() {
+        signaturePageObject.drawSignature();
+    }
+
+    public void verifySignaturePage(String signatureHeader) {
+        assertThat(signaturePageObject.getTextOfQuestionLabelOnSignature(), is(signatureHeader));
+        assertTrue(signaturePageObject.isMandatoryDisplayedOnSignature());
+        assertTrue(signaturePageObject.isClearSignatureDisplayed());
+    }
+
+    public void navigateOnSignaturePage() {
+        signaturePageObject.continueToPhoneNumber();
+    }
+
+    public void fillPhoneNumberPage() {
+        phoneNumberPageObject.fillAreaField("20");
+        phoneNumberPageObject.fillPhoneNumberField("1234567");
+    }
+
+    public void verifyPhoneNumberPage(String phoneNumberHeader) {
+        assertThat(phoneNumberPageObject.getTextOfQuestionLabelOnPhoneNumber(), is(phoneNumberHeader));
+        assertTrue(phoneNumberPageObject.isMandatoryDisplayedOnPhoneNumber());
+    }
+
+    public void navigateOnPhoneNumberPage() {
+        phoneNumberPageObject.continueToSecurityQuestion();
+    }
+
+    public void fillSecurityQuestionPage(String secretQuestion) {
+        securityQuestionPageObject.clickSecurityQuestionDropDown();
+        securityQuestionPageObject.selectQuestion(secretQuestion);
+        securityQuestionPageObject.fillSecretAnswer("test");
+    }
+
+    public void verifySecurityQuestionPage(String securityQuestionHeader) {
+        assertThat(securityQuestionPageObject.getTextOfQuestionLabelOnSecurityQuestion(), is(securityQuestionHeader));
+    }
+
+    public void navigateOnSecurityQuestionPage() {
+        securityQuestionPageObject.continueToEmail();
+    }
+
+    public void fillEmailPage() {
+        emailPageObject.fillEmailField("secret@email.com");
+    }
+
+    public void verifyEmailPage() {
+        assertThat(emailPageObject.getTextOfQuestionLabelOnEmail(), is("E-mail"));
+    }
+
+    public void submitForm() {
+        emailPageObject.submitForm();
+    }
+
+    public Map<String, String> setLocalizationKeys() {
+        localization_texts.put(TEST_FORM_HEADER, TEST_FORM_HEADER);
+        localization_texts.put(SIGNATURE_HEADER, SIGNATURE_HEADER);
+        localization_texts.put(PHONE_NUMBER_HEADER, PHONE_NUMBER_HEADER);
+        localization_texts.put(SECURITY_QUESTION_HEADER, SECURITY_QUESTION_HEADER);
+        localization_texts.put(SECURITY_QUESTION, SECURITY_QUESTION);
+        localization_texts.put(THANK_YOU_HEADER, THANK_YOU_HEADER);
+        localization_texts.put(SUBMISSION_RECEIVED_MESSAGE, SUBMISSION_RECEIVED_MESSAGE);
+        return localization_texts;
     }
 }

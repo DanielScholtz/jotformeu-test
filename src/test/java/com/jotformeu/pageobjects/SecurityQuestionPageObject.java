@@ -10,15 +10,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class SecurityQuestionPageObjects extends BasePageObjects {
+public class SecurityQuestionPageObject extends BasePageObjects {
 
-    @FindBy(css = ".jfDropdown-chipContainer")
+    @FindBy(className = "jfDropdown-chipContainer")
     private WebElement dropDownQuestion;
 
     @FindBy(css = "#jfDropdown-optionList-13-mixed-dropdown > ul > li")
     private List<WebElement> dropDownOptions;
 
-    @FindBy(css = "#input_13_field_2")
+    @FindBy(id = "input_13_field_2")
     private WebElement answerField;
 
     @FindBys({
@@ -33,6 +33,10 @@ public class SecurityQuestionPageObjects extends BasePageObjects {
     })
     private WebElement securityQuestionLabel;
 
+    public SecurityQuestionPageObject(WebDriver driver) {
+        super(driver);
+    }
+
     public void clickSecurityQuestionDropDown() {
         dropDownQuestion.click();
     }
@@ -40,7 +44,7 @@ public class SecurityQuestionPageObjects extends BasePageObjects {
     public void selectQuestion(String question) {
         // Used loop for searching the text instead of getting the nth index since the order of the question could change
         for (WebElement dropDownOption : dropDownOptions) {
-            if (dropDownOption.getText().equals(question)) {
+            if (question.equals(dropDownOption.getText())) {
                 dropDownOption.click();
             }
         }
@@ -57,9 +61,5 @@ public class SecurityQuestionPageObjects extends BasePageObjects {
     public String getTextOfQuestionLabelOnSecurityQuestion() {
         wait.until(ExpectedConditions.visibilityOfAllElements(securityQuestionLabel));
         return securityQuestionLabel.getText();
-    }
-
-    public SecurityQuestionPageObjects(WebDriver driver) {
-        super(driver);
     }
 }

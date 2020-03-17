@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class PhoneNumberPageObjects extends BasePageObjects {
+public class PhoneNumberPageObject extends BasePageObjects {
 
     @FindBy(xpath = "//*[@id='input_4_area']")
     private WebElement areaField;
@@ -34,6 +34,10 @@ public class PhoneNumberPageObjects extends BasePageObjects {
     })
     private WebElement phoneNumberIsMandatory;
 
+    public PhoneNumberPageObject(WebDriver driver) {
+        super(driver);
+    }
+
     public void fillAreaField(String area) {
         areaField.sendKeys(area);
     }
@@ -53,9 +57,5 @@ public class PhoneNumberPageObjects extends BasePageObjects {
 
     public boolean isMandatoryDisplayedOnPhoneNumber() {
         return isDisplayed(phoneNumberIsMandatory);
-    }
-
-    public PhoneNumberPageObjects(WebDriver driver) {
-        super(driver);
     }
 }

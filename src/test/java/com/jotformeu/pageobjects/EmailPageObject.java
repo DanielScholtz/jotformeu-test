@@ -8,22 +8,23 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class EmailPageObjects extends BasePageObjects {
+public class EmailPageObject extends BasePageObjects {
 
     @FindBy(name = "q5_email")
     private WebElement emailField;
 
     @FindBys({
-        @FindBy(css = "#cid_5"),
-        @FindBy(css = ".jfInput-button.forSubmit.form-submit-button.u-right")
+        @FindBy(css = "#id_5"),
+        @FindBy(css = "button[type=submit]")
     })
     private WebElement submitForm;
 
-    @FindBys({
-        @FindBy(css = "#cid_5"),
-        @FindBy(css = ".jsQuestionLabelContainer")
-    })
+    @FindBy(css = "#label_5 > span")
     private WebElement emailQuestionLabel;
+
+    public EmailPageObject(WebDriver driver) {
+        super(driver);
+    }
 
     public void fillEmailField(String email) {
         wait.until(ExpectedConditions.visibilityOf(emailField));
@@ -37,9 +38,5 @@ public class EmailPageObjects extends BasePageObjects {
     public String getTextOfQuestionLabelOnEmail() {
         wait.until(ExpectedConditions.visibilityOfAllElements(emailQuestionLabel));
         return emailQuestionLabel.getText();
-    }
-
-    public EmailPageObjects(WebDriver driver) {
-        super(driver);
     }
 }

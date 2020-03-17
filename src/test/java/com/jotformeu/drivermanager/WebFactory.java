@@ -1,6 +1,5 @@
 package com.jotformeu.drivermanager;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -9,16 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class DriverManager {
+public class WebFactory {
 
     public static final String BROWSER_TYPE = "browser.type";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DriverManager.class);
-
-    @BeforeAll
-    public void setUp() {
-        getDriver().manage().deleteAllCookies();
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebFactory.class);
 
     public static WebDriver getDriver() {
         WebDriver driver;

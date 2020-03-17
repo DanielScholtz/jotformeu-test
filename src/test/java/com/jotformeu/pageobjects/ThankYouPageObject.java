@@ -3,13 +3,12 @@ package com.jotformeu.pageobjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class ThankYouPageObjects extends BasePageObjects {
+public class ThankYouPageObject extends BasePageObjects {
 
-    @FindBy(css = ".jfThankYou-imageWrapper")
+    @FindBy(className = "jfThankYou-imageWrapper")
     private WebElement thankYouBlock;
 
     @FindBy(css = ".jfThankYou-header.form-header")
@@ -17,6 +16,10 @@ public class ThankYouPageObjects extends BasePageObjects {
 
     @FindBy(css = ".jfThankYou-description.form-subHeader")
     private WebElement thankYouMsg;
+
+    public ThankYouPageObject(WebDriver driver) {
+        super(driver);
+    }
 
     public void isThankYouBlockDisplayed() {
         isDisplayed(thankYouBlock);
@@ -28,9 +31,5 @@ public class ThankYouPageObjects extends BasePageObjects {
 
     public String getTextOfThankYouMessage() {
         return thankYouMsg.getText();
-    }
-
-    public ThankYouPageObjects(WebDriver driver) {
-        super(driver);
     }
 }

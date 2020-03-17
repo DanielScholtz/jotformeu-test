@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-public class SignaturePageObjects extends BasePageObjects {
+public class SignaturePageObject extends BasePageObjects {
 
     @FindBy(css = "canvas.jSignature")
     private WebElement signatureField;
@@ -34,6 +34,10 @@ public class SignaturePageObjects extends BasePageObjects {
         @FindBy(css = ".jfRequiredStar")
     })
     private WebElement signatureIsMandatory;
+
+    public SignaturePageObject(WebDriver driver) {
+        super(driver);
+    }
 
     public void drawSignature() {
         // A simple click would have been enough on the element but wanted to draw something
@@ -61,9 +65,5 @@ public class SignaturePageObjects extends BasePageObjects {
 
     public boolean isClearSignatureDisplayed() {
         return isDisplayed(clearSignatureBtn);
-    }
-
-    public SignaturePageObjects(WebDriver driver) {
-        super(driver);
     }
 }
