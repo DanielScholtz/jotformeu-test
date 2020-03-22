@@ -7,7 +7,9 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmailPageObject extends BasePageObjects {
 
     @FindBy(name = "q5_email")

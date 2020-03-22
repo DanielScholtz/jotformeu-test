@@ -5,7 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.jotformeu.BasePageObjects;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ThankYouPageObject extends BasePageObjects {
 
     @FindBy(className = "jfThankYou-imageWrapper")

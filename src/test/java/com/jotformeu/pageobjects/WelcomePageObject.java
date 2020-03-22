@@ -6,7 +6,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WelcomePageObject extends BasePageObjects {
 
     @FindBy(id = "header_welcomePage")
