@@ -1,7 +1,17 @@
 package com.jotformeu;
 
-import com.jotformeu.pageobjects.*;
-import org.junit.jupiter.api.AfterAll;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,21 +21,20 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.jotformeu.config.E2ETestConfig;
+import com.jotformeu.pageobjects.EmailPageObject;
+import com.jotformeu.pageobjects.FileUploadPageObject;
+import com.jotformeu.pageobjects.PhoneNumberPageObject;
+import com.jotformeu.pageobjects.SecurityQuestionPageObject;
+import com.jotformeu.pageobjects.SignaturePageObject;
+import com.jotformeu.pageobjects.ThankYouPageObject;
+import com.jotformeu.pageobjects.WelcomePageObject;
 
 @ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = E2ETestConfig.class)
 public class E2ETest {
 
     private static final String TEST_FORM_HEADER = "test_form_header";
@@ -36,23 +45,25 @@ public class E2ETest {
     private static final String THANK_YOU_HEADER = "thank_you_header";
     private static final String SUBMISSION_RECEIVED_MESSAGE = "submission_received_message";
     private static final String FORM_PAGE = "https://form.jotformeu.com/92543326450353";
-    private static WebDriver driver;
     private Map<String, String> localization_texts = new HashMap<>();
 
-    @Resource
+
+    @Autowired
     private WelcomePageObject welcomePageObject;
-    @Resource
+    @Autowired
     private FileUploadPageObject fileUploadPageObject;
-    @Resource
+    @Autowired
     private SignaturePageObject signaturePageObject;
-    @Resource
+    @Autowired
     private PhoneNumberPageObject phoneNumberPageObject;
-    @Resource
+    @Autowired
     private SecurityQuestionPageObject securityQuestionPageObject;
-    @Resource
+    @Autowired
     private EmailPageObject emailPageObject;
-    @Resource
+    @Autowired
     private ThankYouPageObject thankYouPageObject;
+    @Autowired
+    private WebDriver driver;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(E2ETest.class);
 
@@ -69,8 +80,8 @@ public class E2ETest {
         driver.get(FORM_PAGE);
     }
 
-    @AfterAll
-    static void tearDown() {
+    @AfterEach
+    public void tearDown() {
         driver.quit();
     }
 

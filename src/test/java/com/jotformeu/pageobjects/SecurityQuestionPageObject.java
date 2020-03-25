@@ -9,6 +9,8 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,6 +37,7 @@ public class SecurityQuestionPageObject extends BasePageObjects {
     })
     private WebElement securityQuestionLabel;
 
+    @Autowired
     public SecurityQuestionPageObject(WebDriver driver) {
         super(driver);
     }
