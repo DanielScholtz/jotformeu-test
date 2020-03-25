@@ -6,6 +6,10 @@ import org.openqa.selenium.support.FindBy;
 
 import com.jotformeu.BasePageObjects;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ThankYouPageObject extends BasePageObjects {
 
     @FindBy(className = "jfThankYou-imageWrapper")
@@ -17,6 +21,7 @@ public class ThankYouPageObject extends BasePageObjects {
     @FindBy(css = ".jfThankYou-description.form-subHeader")
     private WebElement thankYouMsg;
 
+    @Autowired
     public ThankYouPageObject(WebDriver driver) {
         super(driver);
     }

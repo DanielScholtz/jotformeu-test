@@ -10,6 +10,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class FileUploadPageObject extends BasePageObjects {
 
     private static final String FILE_NAME = "src/test/resources/com/jotformeu/uploadfile/test.txt";
@@ -38,6 +42,7 @@ public class FileUploadPageObject extends BasePageObjects {
     })
     private WebElement fileUploadIsMandatory;
 
+    @Autowired
     public FileUploadPageObject(WebDriver driver) {
         super(driver);
     }

@@ -7,6 +7,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class WelcomePageObject extends BasePageObjects {
 
     @FindBy(id = "header_welcomePage")
@@ -15,6 +19,7 @@ public class WelcomePageObject extends BasePageObjects {
     @FindBy(id = "jfCard-welcome-start")
     private WebElement welcomePageNextButton;
 
+    @Autowired
     public WelcomePageObject(WebDriver driver) {
         super(driver);
     }

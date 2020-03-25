@@ -5,16 +5,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class WebFactory {
+@Component
+public class WebDriverFactory {
 
     public static final String BROWSER_TYPE = "browser.type";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverFactory.class);
 
-    public static WebDriver getDriver() {
+    public WebDriver getDriver() {
         WebDriver driver;
         LOGGER.info("Starting {}", getDriverType());
         if (getDriverType().equalsIgnoreCase("chrome")) {
