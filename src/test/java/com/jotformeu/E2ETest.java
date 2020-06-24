@@ -11,20 +11,17 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.jotformeu.config.E2ETestConfig;
+import com.jotformeu.drivermanager.WebFactory;
 import com.jotformeu.pageobjects.EmailPageObject;
 import com.jotformeu.pageobjects.FileUploadPageObject;
 import com.jotformeu.pageobjects.PhoneNumberPageObject;
@@ -33,8 +30,6 @@ import com.jotformeu.pageobjects.SignaturePageObject;
 import com.jotformeu.pageobjects.ThankYouPageObject;
 import com.jotformeu.pageobjects.WelcomePageObject;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = E2ETestConfig.class)
 public class E2ETest {
 
     private static final String TEST_FORM_HEADER = "test_form_header";
@@ -45,25 +40,15 @@ public class E2ETest {
     private static final String THANK_YOU_HEADER = "thank_you_header";
     private static final String SUBMISSION_RECEIVED_MESSAGE = "submission_received_message";
     private static final String FORM_PAGE = "https://form.jotformeu.com/92543326450353";
+    private static WebDriver driver;
+    private static WelcomePageObject welcomePageObject;
+    private static FileUploadPageObject fileUploadPageObject;
+    private static SignaturePageObject signaturePageObject;
+    private static PhoneNumberPageObject phoneNumberPageObject;
+    private static SecurityQuestionPageObject securityQuestionPageObject;
+    private static EmailPageObject emailPageObject;
+    private static ThankYouPageObject thankYouPageObject;
     private Map<String, String> localization_texts = new HashMap<>();
-
-
-    @Autowired
-    private WelcomePageObject welcomePageObject;
-    @Autowired
-    private FileUploadPageObject fileUploadPageObject;
-    @Autowired
-    private SignaturePageObject signaturePageObject;
-    @Autowired
-    private PhoneNumberPageObject phoneNumberPageObject;
-    @Autowired
-    private SecurityQuestionPageObject securityQuestionPageObject;
-    @Autowired
-    private EmailPageObject emailPageObject;
-    @Autowired
-    private ThankYouPageObject thankYouPageObject;
-    @Autowired
-    private WebDriver driver;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(E2ETest.class);
 
@@ -74,14 +59,26 @@ public class E2ETest {
             Arguments.of("hu", "HU"));
     }
 
+    @BeforeAll
+    static void beforeAll() {
+        driver = WebFactory.getDriver();
+        welcomePageObject = new WelcomePageObject(driver);
+        fileUploadPageObject = new FileUploadPageObject(driver);
+        signaturePageObject = new SignaturePageObject(driver);
+        phoneNumberPageObject = new PhoneNumberPageObject(driver);
+        securityQuestionPageObject = new SecurityQuestionPageObject(driver);
+        emailPageObject = new EmailPageObject(driver);
+        thankYouPageObject = new ThankYouPageObject(driver);
+    }
+
     @BeforeEach
     public void setUp() {
         driver.manage().deleteAllCookies();
         driver.get(FORM_PAGE);
     }
 
-    @AfterEach
-    public void tearDown() {
+    @AfterAll
+    static void tearDown() {
         driver.quit();
     }
 

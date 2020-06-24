@@ -8,10 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
 public class EmailPageObject extends BasePageObjects {
 
     @FindBy(name = "q5_email")
@@ -26,7 +22,6 @@ public class EmailPageObject extends BasePageObjects {
     @FindBy(css = "#label_5 > span")
     private WebElement emailQuestionLabel;
 
-    @Autowired
     public EmailPageObject(WebDriver driver) {
         super(driver);
     }

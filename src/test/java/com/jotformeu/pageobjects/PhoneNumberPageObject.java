@@ -8,10 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
 public class PhoneNumberPageObject extends BasePageObjects {
 
     @FindBy(xpath = "//*[@id='input_4_area']")
@@ -38,7 +34,6 @@ public class PhoneNumberPageObject extends BasePageObjects {
     })
     private WebElement phoneNumberIsMandatory;
 
-    @Autowired
     public PhoneNumberPageObject(WebDriver driver) {
         super(driver);
     }

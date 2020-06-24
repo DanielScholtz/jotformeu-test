@@ -9,10 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.jotformeu.BasePageObjects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
 public class SignaturePageObject extends BasePageObjects {
 
     @FindBy(css = "canvas.jSignature")
@@ -39,7 +35,6 @@ public class SignaturePageObject extends BasePageObjects {
     })
     private WebElement signatureIsMandatory;
 
-    @Autowired
     public SignaturePageObject(WebDriver driver) {
         super(driver);
     }
