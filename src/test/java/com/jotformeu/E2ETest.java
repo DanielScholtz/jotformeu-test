@@ -21,6 +21,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -35,6 +36,7 @@ import com.jotformeu.pageobjects.WelcomePageObject;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = E2ETestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class E2ETest {
 
     private static final String TEST_FORM_HEADER = "test_form_header";

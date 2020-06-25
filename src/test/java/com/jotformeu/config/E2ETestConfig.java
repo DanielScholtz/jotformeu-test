@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.jotformeu.drivermanager.WebDriverFactory;
+import org.springframework.context.annotation.Configuration;
 
 @ComponentScan(basePackages = "com.jotformeu")
+@Configuration
 public class E2ETestConfig {
 
     @Autowired
